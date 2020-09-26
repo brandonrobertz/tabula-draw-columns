@@ -1,0 +1,14 @@
+#!/bin/bash
+PDF=${@}
+BASENAME=$(basename -s .pdf "${PDF}")
+
+echo "PDF: ${PDF}"
+echo "BASENAME: ${BASENAME}"
+
+if [ -z "${PDF}" ]; then
+    echo "USAGE: split_pdf path/to/file.pdf"
+    echo "This will take a PDF file, split it up into pages and"
+    echo "write those pages out as TIF files in the out/ directory."
+fi
+
+gs -dNOPAUSE -dBATCH -sDEVICE=tiffg4 -sOutputFile="out/${BASENAME}-p%d.tif" "${PDF}"

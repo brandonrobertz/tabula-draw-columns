@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+  <head>
+    <style>
+html, body {
+  margin: 0;
+  padding: 0;
+}
+#render-area {
+  margin: 0;
+  display: block;
+  width: 100%;
+  min-height: 90vh;
+  background-position: top left;
+  background-size: cover;
+}
+.column {
+  position: absolute;
+  width: 1px;
+  height: 100%;
+  top: 0;
+  background-color: red;
+}
+#ruler {
+  background-color: #666;
+}
+    </style>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+      crossorigin="anonymous"></script>
+    <script>
+const addColumn = (e) => {
+  console.log("Adding column. Event:", e);
+  const y = e.clientX;
+  const column = $('<div class="column"></div>');
+  column.css("left", y);
+  column.appendTo('body');
+};
+const onClick = (e) => {
+  if (e.target.id !== "ruler" && e.target.classList.contains('column')) {
+    removeColumn(e.target);
+  } else {
+    addColumn(e);
+  }
+}
+const moveRuler = (e) => {
+  $('#ruler').css("left", e.clientX);
+};
+const outputConfig = () => {
+  const width = $('#render-area').width();
+  const lefts = [];
+  $(".column").each((_, col) => {
+    if (col.id === 'ruler') return;
+    const left = Number.parseInt($(col).css("left").replace("px", ""));
+    lefts.push(left);
+  });
+  const cols = lefts.sort((a,b)=>a-b).map((left) => {
+    console.log(left, "/", width, "=", left / width);
+    return (left * 100) / width;
+  });
+  const joined = cols.map((pct) => pct.toFixed(2)).join(',');
+  console.info(`%${joined}`);
+};
+const keyHandler = (e) => {
+  console.log("Key pressed", event.which);
+  // enter key
+  if (e.which == 13) {
+    outputConfig();
+  } else if (e.which === 27) {
+    console.log("Clear everything!");
+  }
+};
+$(document).ready(() => {
+  const filename = "out/2019_Log-p4.tif.png";
+  $("#render-area").css("background-image", `url('${filename}'`);
+  $('#ruler').on("click", onClick);
+  $(document).on("mousemove", moveRuler);
+  $(document).on("keyup", keyHandler);
+});
+    </script>
+  </head>
+  <body>
+    <div id="render-area"></div>
+    <div id="ruler" class="column"></div>
+  </body>
+</html>
