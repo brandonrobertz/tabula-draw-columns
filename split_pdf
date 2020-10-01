@@ -11,4 +11,5 @@ if [ -z "${PDF}" ]; then
     echo "write those pages out as TIF files in the out/ directory."
 fi
 
+mkdir -p out
 gs -dNOPAUSE -dBATCH -sDEVICE=tiffg4 -sOutputFile="out/${BASENAME}-p%d.tif" "${PDF}"
