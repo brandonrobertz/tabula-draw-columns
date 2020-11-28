@@ -1,0 +1,7 @@
+#!/bin/bash
+echo "window.PDF_IMG_filenames = [" > ./dist/filenames.js
+while read FILENAME; do
+    echo "\"${FILENAME}\"," >> ./dist/filenames.js
+done <<< $(ls -A out/*.png | sort -nr)
+echo "];" >> ./dist/filenames.js
+

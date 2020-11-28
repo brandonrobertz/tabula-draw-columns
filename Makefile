@@ -6,8 +6,12 @@ check_pdf:
 
 prepare_pdf: check_pdf
 	rm -rf out/
-	./split_pdf '${PDF}'
+	./split_pdf "${PDF}"
 	find out/ -iname '*.tif' -exec convert {} {}.png \;
+	ls out/
+	./build_filenames_js
 
 serve:
 	python -m http.server 8080
+
+start: prepare_pdf serve

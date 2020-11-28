@@ -1,7 +1,9 @@
 *.pyc
 __pycache__
 node_modules
-out/
 *.webm
 *.mp4
 .*.swp
+
+out/
+dist/filenames.js
