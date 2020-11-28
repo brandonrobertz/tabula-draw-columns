@@ -1,6 +1,6 @@
 # Tabula Columns Configurator
 
-![Tabula Columns Configurator screenshot](https://github.com/brandonrobertz/tabula-draw-columns/blob/master/screenshot.png)
+![Tabula Columns Configurator screenshot](https://github.com/brandonrobertz/tabula-draw-columns/blob/main/screenshot.png)
 
 [Tabula](https://github.com/tabulapdf/tabula-java) is an amazing piece of software, especially when it Just Works. But, if you use it enough, eventually you have to hold its hand and tell it where all the columns are on a page in pixels or percent of the page. This simple script lets you produce that configuration string by placing lines on an image of your PDF from your browser.
 
