@@ -120,6 +120,7 @@ const keyHandler = (e) => {
 };
 
 const run = (filename) => {
+  console.log("filename", filename);
   $("#render-area").css("background-image", `url('${filename}'`);
   $("#render-area").on("mousemove", moveRuler);
   $("#ruler").on("click", addColumn);
@@ -143,7 +144,8 @@ const nextDocument = () => {
   if (window.CURRENT_PDF_IMG === window.PDF_IMG_filenames.length - 1) {
     window.CURRENT_PDF_IMG = -1;
   }
-  run(window.PDF_IMG_filenames[++window.CURRENT_PDF_IMG]);
+  const filename = window.PDF_IMG_filenames[++window.CURRENT_PDF_IMG];
+  $("#render-area").css("background-image", `url('${filename}'`);
 };
 
 const clearConf = () => {
