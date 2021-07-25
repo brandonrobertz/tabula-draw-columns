@@ -35,7 +35,7 @@ html, body {
   width: 100%;
 }
 #conf-area {
-  font-size: 30px;
+  font-size: 12px;
   font-weight: bold;
   font-family: monospace;
   text-align: center;
@@ -71,6 +71,7 @@ html, body {
       integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
       crossorigin="anonymous"></script>
     <script>
+let use_R_columns = false;
 const addColumn = (e) => {
   const y = e.clientX;
   const column = $('<div class="column"></div>');
@@ -102,12 +103,26 @@ const outputConfig = () => {
   if (!lefts || !lefts.length) {
     return;
   }
-  const cols = lefts.sort((a,b)=>a-b).map((left) => {
-    return (left * 100) / width;
-  });
-  const joined = cols.map((pct) => pct.toFixed(2)).join(',');
-  const config = `%${joined}`
-  $("#conf-area").val(config);
+  if (!use_R_columns) {
+    const cols = lefts.sort((a,b)=>a-b).map((left) => {
+      return (left * 100) / width;
+    });
+    const joined = cols.map((pct) => pct.toFixed(2)).join(',');
+    const config = `%${joined}`
+    $("#conf-area").val(config);
+  } else {
+    const area = $("#render-area")[0];
+    const url = area.style["background-image"].split('"')[1];
+    console.log("URL", url)
+    const cols = lefts.sort((a,b)=>a-b).map((left) => {
+      const pct = left / width;
+      return pct;
+    });
+    const joined = cols.join(', ');
+    const config = `columns=list(lapply(list(${joined}), function(x) x*get_page_dims(f)[[1]][2]))`
+    $("#conf-area").val(config);
+
+  }
 };
 
 const keyHandler = (e) => {
@@ -148,6 +163,11 @@ const nextDocument = () => {
   $("#render-area").css("background-image", `url('${filename}'`);
 };
 
+const use_R = () => {
+  use_R_columns = !use_R_columns;
+  outputConfig();
+};
+
 const clearConf = () => {
   $("#conf-area").val("");
   $(".column").each((_, col) => {
@@ -160,6 +180,7 @@ $(document).ready(() => {
   window.CURRENT_PDF_IMG = 0;
   run(window.PDF_IMG_filenames[window.CURRENT_PDF_IMG]);
   $("#next-doc").on("click", nextDocument);
+  $("#R-btn").on("click", use_R);
   $("#clear-conf").on("click", clearConf);
 });
     </script>
@@ -170,6 +191,7 @@ $(document).ready(() => {
       <button id="clear-conf" class="btn">Clear</button>
       <input type="text" id="conf-area" name="conf-area" value="" />
       <button id="copy-btn" class="btn" data-clipboard-target="#conf-area">&#128203;</button>
+      <button id="R-btn" class="btn">R</button>
       <button id="next-doc" class="btn">Next</button>
     </div>
     <div id="filename-area"></div>
