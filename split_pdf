@@ -2,6 +2,8 @@
 PDF=${@}
 BASENAME=$(basename -s .pdf "${PDF}")
 
+set -e
+
 echo "PDF: ${PDF}"
 echo "BASENAME: ${BASENAME}"
 
